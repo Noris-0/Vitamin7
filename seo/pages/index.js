@@ -7,7 +7,16 @@ import _ from 'lodash';
 import styles from '../styles/Home.module.css';
 import CodeSampleModal from '../components/CodeSampleModal';
 
-export default function Start({ countries }) {
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import clsx from 'clsx';
+
+function Home({ countries }) {
+  const pathname = usePathname();
+  const containerClass = clsx('container', {
+    'dark-mode': pathname === '/dark-mode', 
+  });
+
   const [results, setResults] = useState(countries);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const fuse = new Fuse(countries, {
@@ -16,7 +25,15 @@ export default function Start({ countries }) {
   });
 
   return (
-    <div>
+    <div className={containerClass}>
+      <div>
+        <Link href="/dark-mode">
+          <button>Dark-Mode</button>
+        </Link>
+        <Link href="/">
+          <button>Light-Mode</button>
+        </Link>
+      </div>
       <Head>
         <title>Core Web Vitals</title>
         <meta name="description" content="Core web vitals walk through" />
@@ -113,3 +130,5 @@ export async function getServerSideProps() {
     },
   };
 }
+
+export default Home;
